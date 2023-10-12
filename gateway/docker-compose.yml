@@ -1,0 +1,17 @@
+version: '3'
+services:
+
+#Gateway service------------------------------
+
+  gateway: # meaning the name of the app
+    build: . # Specify the path to your Spring Boot application Dockerfile
+    restart: always
+    ports:
+      - '8765:8765'
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true
+

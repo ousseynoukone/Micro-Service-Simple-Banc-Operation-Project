@@ -1,0 +1,45 @@
+version: '3'
+services:
+#Auth service------------------------------
+
+  dbAuth:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_DATABASE: "auth_service_db" # Set the name of your database
+   #   MYSQL_USER: "root"         # Set your MySQL username
+   #   MYSQL_PASSWORD: "" # Set your MySQL password
+    volumes:
+      - dbAuth_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  auth: # meaning the name of the app
+    depends_on:
+      - dbAuth
+    build: . # Specify the path to your Spring Boot application Dockerfile
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://dbAuth:3306/auth_service_db" # Database URL
+      #SPRING_DATASOURCE_USERNAME: "myuser"                       # Database username
+      #SPRING_DATASOURCE_PASSWORD: "mypassword"                   # Database password
+    ports:
+      - '8080:8080'
+    networks:
+      - app-network
+
+
+
+
+
+
+
+networks:
+  app-network:
+    external: true
+
+
+
+volumes:
+  dbAuth_data:
